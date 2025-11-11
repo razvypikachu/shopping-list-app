@@ -30,9 +30,15 @@ def add(name, quantity, price, category):
 	shoppinglist.append(item)
 	save(shoppinglist)
 	itemtotal = quantity * price
-	print(f"Added {quantity} x {name}, unit price ${price} to category '{category}'. Total: ${itemtotal}")
+	print(f"Added {quantity} x {name}, unit price ${price} to category '{category}', total ${itemtotal}")
 
-
+def list(sortby=None):
+	shoppinglist = load()
+	if sortby:
+		print(f"(will sort, not yet implemented)")
+	for item in shoppinglist:
+		total = item["quantity"] * item["price"]
+		print(f'{item["name"]} ({item["category"]}) - {item["quantity"]} x {item["price"]} = {total}')
 
 
 def main():
@@ -43,6 +49,8 @@ def main():
 	mainparser_add.add_argument("quantity", type=int, help = "Quantity")
 	mainparser_add.add_argument("price", type = float, help = "Price")
 	mainparser_add.add_argument("category", help = "Category")	
+	mainparser_list = subparsers.add_parser("list", help = "List items")
+	mainparser_list.add_argument("--sortby", choices=["name", "category", "price"], help="Sort by field")
 	if len(sys.argv) == 1:
 		mainparser.print_help(sys.stderr)
 		sys.exit(1)
@@ -50,6 +58,8 @@ def main():
 	args = mainparser.parse_args()
 	if args.command == "add":
 		add(args.name, args.quantity, args.price, args.category)
+	elif args.command == "list":
+		list(args.sortby)
 	else:
 		print(f"{args.command} not yet")
 
