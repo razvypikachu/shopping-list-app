@@ -8,7 +8,7 @@ def add(name, quantity, price, category):
 
 def main():
 	mainparser = argparse.ArgumentParser()
-	subparsers = mainparser.add_subparsers(dest="command", required=True, help="Comenzi disponibile:")
+	subparsers = mainparser.add_subparsers(dest="command", required=True, help="Available commands:")
 	mainparser_add = subparsers.add_parser("add", help = "Add item")
 	mainparser_add.add_argument("name", help = "Item name")
 	mainparser_add.add_argument("quantity", type=int, help = "Quantity")
