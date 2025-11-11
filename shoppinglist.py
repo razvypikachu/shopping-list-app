@@ -40,6 +40,16 @@ def list(sortby=None):
 		total = item["quantity"] * item["price"]
 		print(f'{item["name"]} ({item["category"]}) - {item["quantity"]} x {item["price"]} = {total}')
 
+def remove(name):
+	shoppinglist = load()
+	newlist = [item for item in shoppinglist if item["name"] != name]
+	if(len(newlist) == len(shoppinglist)):
+		print(f"Item '{name}' not found")
+	else:
+		save(newlist)
+		print(f"Removed '{name}'")
+
+
 
 def main():
 	mainparser = argparse.ArgumentParser()
@@ -49,6 +59,8 @@ def main():
 	mainparser_add.add_argument("quantity", type=int, help = "Quantity")
 	mainparser_add.add_argument("price", type = float, help = "Price")
 	mainparser_add.add_argument("category", help = "Category")	
+	mainparser_remove = subparsers.add_parser("remove", help = "Remove item")
+	mainparser_remove.add_argument("name", help = "Item name")
 	mainparser_list = subparsers.add_parser("list", help = "List items")
 	mainparser_list.add_argument("--sortby", choices=["name", "category", "price"], help="Sort by field")
 	if len(sys.argv) == 1:
@@ -60,6 +72,8 @@ def main():
 		add(args.name, args.quantity, args.price, args.category)
 	elif args.command == "list":
 		list(args.sortby)
+	elif args.command == "remove":
+		remove (args.name)
 	else:
 		print(f"{args.command} not yet")
 
