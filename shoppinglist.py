@@ -32,7 +32,7 @@ def add(name, quantity, price, category):
 	itemtotal = quantity * price
 	print(f"Added {quantity} x {name}, unit price ${price} to category '{category}', total ${itemtotal}")
 
-def list(sortby=None):
+def listitems(sortby=None):
 	shoppinglist = load()
 	if sortby:
 		print(f"(will sort, not yet implemented)")
@@ -56,6 +56,20 @@ def search(category):
 			total = item["quantity"] * item["price"]
 			print(f'{item["name"]} ({item["category"]}) - {item["quantity"]} x {item["price"]} = {total}')
 
+def total():
+	shoppinglist = load()
+	totalcost = 0
+	categorytotals = {}
+	for item in shoppinglist:
+		itemtotal = item["quantity"] * item["price"]
+		totalcost += itemtotal
+		if item["category"] in categorytotals:
+			categorytotals[item["category"]] += itemtotal
+		else:
+			categorytotals[item["category"]] = itemtotal
+	print(f"Total cost of shopping list:{totalcost}")
+	for category, cat_total in categorytotals.items():
+		print(f"Category '{category}':{cat_total}")
 
 def main():
 	mainparser = argparse.ArgumentParser()
@@ -71,6 +85,7 @@ def main():
 	mainparser_list.add_argument("--sortby", choices=["name", "category", "price"], help="Sort by field")
 	mainparser_search = subparsers.add_parser("search", help = "Search by category")
 	mainparser_search.add_argument("category", help = "Category")
+	mainparser_total = subparsers.add_parser("total", help = "Total cost")
 	if len(sys.argv) == 1:
 		mainparser.print_help(sys.stderr)
 		sys.exit(1)
@@ -79,11 +94,13 @@ def main():
 	if args.command == "add":
 		add(args.name, args.quantity, args.price, args.category)
 	elif args.command == "list":
-		list(args.sortby)
+		listitems(args.sortby)
 	elif args.command == "remove":
 		remove(args.name)
 	elif args.command == "search":
 		search(args.category)
+	elif args.command == "total":
+		total()
 	else:
 		print(f"{args.command} not yet")
 
