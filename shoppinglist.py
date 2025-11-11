@@ -12,10 +12,27 @@ def load():
 def save(shoppinglist):
 	with open (slfile, "w") as f:
 		json.dump(shoppinglist, f, indent=4)
-		
+
 def add(name, quantity, price, category):
-	print(f"Add: {name}, quantity {quantity}, price {price}, category {category}")
-	pass
+	if quantity <= 0:
+		print("Quantity must be positive")
+		return
+	if price < 0:
+		print("Price cannot be negative")
+		return
+	shoppinglist = load()
+	item = {
+		"name": name,
+		"quantity": quantity,
+		"price": price,
+		"category": category
+	}
+	shoppinglist.append(item)
+	save(shoppinglist)
+	itemtotal = quantity * price
+	print(f"Added {quantity} x {name}, unit price ${price} to category '{category}'. Total: ${itemtotal}")
+
+
 
 
 def main():
