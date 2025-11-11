@@ -1,6 +1,18 @@
 import sys
 import argparse
+import json
+import os
+slfile = "shoppinglist.json"
 
+def load():
+	if os.path.exists(slfile):
+		with open (slfile, "r") as f:
+			return json.load(f)
+	return []
+def save(shoppinglist):
+	with open (slfile, "w") as f:
+		json.dump(shoppinglist, f, indent=4)
+		
 def add(name, quantity, price, category):
 	print(f"Add: {name}, quantity {quantity}, price {price}, category {category}")
 	pass
