@@ -49,6 +49,12 @@ def remove(name):
 		save(newlist)
 		print(f"Removed '{name}'")
 
+def search(category):
+	shoppinglist = load()
+	for item in shoppinglist:
+		if item["category"] == category:
+			total = item["quantity"] * item["price"]
+			print(f'{item["name"]} ({item["category"]}) - {item["quantity"]} x {item["price"]} = {total}')
 
 
 def main():
@@ -63,6 +69,8 @@ def main():
 	mainparser_remove.add_argument("name", help = "Item name")
 	mainparser_list = subparsers.add_parser("list", help = "List items")
 	mainparser_list.add_argument("--sortby", choices=["name", "category", "price"], help="Sort by field")
+	mainparser_search = subparsers.add_parser("search", help = "Search by category")
+	mainparser_search.add_argument("category", help = "Category")
 	if len(sys.argv) == 1:
 		mainparser.print_help(sys.stderr)
 		sys.exit(1)
@@ -73,7 +81,9 @@ def main():
 	elif args.command == "list":
 		list(args.sortby)
 	elif args.command == "remove":
-		remove (args.name)
+		remove(args.name)
+	elif args.command == "search":
+		search(args.category)
 	else:
 		print(f"{args.command} not yet")
 
