@@ -36,7 +36,7 @@ def add(name, quantity, price, category):
 def listitems(sortby=None):
 	shoppinglist = load()
 	if sortby:
-		print(f"(will sort, not yet implemented)")
+		shoppinglist.sort(key=lambda x: x[sortby])
 	for item in shoppinglist:
 		total = item["quantity"] * item["price"]
 		print(f'{item["name"]} ({item["category"]}) - {item["quantity"]} x {item["price"]} = {total}')
@@ -122,6 +122,5 @@ def main():
 	elif args.command == "export":
 		export(args.filename)
 		
-
 if __name__ == "__main__":
 	main()
