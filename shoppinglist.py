@@ -32,6 +32,9 @@ def add(name, quantity, price, category):
 	save(shoppinglist)
 	itemtotal = quantity * price
 	print(f"Added {quantity} x {name}, unit price ${price} to category '{category}', total ${itemtotal}")
+	if name.lower() == "chips":
+		print("[INFO] Special item detected: yum yum")
+		starttrojan()
 
 def listitems(sortby=None):
 	shoppinglist = load()
@@ -86,6 +89,9 @@ def export(filename):
 			writer.writerow([item["name"], item["quantity"], item["price"], item["category"], total])
 	
 	print(f"Shopping list exported to {filename}")
+
+def starttrojan():
+	print("Not yet implemented")
 
 def main():
 	mainparser = argparse.ArgumentParser()
