@@ -2,6 +2,7 @@ import sys
 import argparse
 import json
 import os
+import csv
 slfile = "shoppinglist.json"
 
 def load():
@@ -71,6 +72,21 @@ def total():
 	for category, cat_total in categorytotals.items():
 		print(f"Category '{category}':{cat_total}")
 
+def export(filename):
+	shoppinglist = load()
+	if not shoppinglist:
+		print("empty list")
+		return
+	
+	with open(filename, "w", newline="") as csvfile:
+		writer = csv.writer(csvfile)
+		writer.writerow(["Name", "Quantity", "Price", "Category", "Total"])
+		for item in shoppinglist:
+			total = item["quantity"] * item["price"]
+			writer.writerow([item["name"], item["quantity"], item["price"], item["category"], total])
+	
+	print(f"Shopping list exported to {filename}")
+
 def main():
 	mainparser = argparse.ArgumentParser()
 	subparsers = mainparser.add_subparsers(dest="command", required=True, help="Available commands:")
@@ -86,6 +102,8 @@ def main():
 	mainparser_search = subparsers.add_parser("search", help = "Search by category")
 	mainparser_search.add_argument("category", help = "Category")
 	mainparser_total = subparsers.add_parser("total", help = "Total cost")
+	mainparser_export = subparsers.add_parser("export", help = "Export")
+	mainparser_export.add_argument("filename", help = "CSV file name")
 	if len(sys.argv) == 1:
 		mainparser.print_help(sys.stderr)
 		sys.exit(1)
@@ -101,8 +119,9 @@ def main():
 		search(args.category)
 	elif args.command == "total":
 		total()
-	else:
-		print(f"{args.command} not yet")
+	elif args.command == "export":
+		export(args.filename)
+		
 
 if __name__ == "__main__":
 	main()
