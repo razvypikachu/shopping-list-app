@@ -1,4 +1,5 @@
 Manager Lista de Cumparaturi CLI
+
 O aplicatie in linie de comanda pentru gestionarea eficienta a listelor de cumparaturi, calcularea bugetului si organizarea produselor pe categorii.
 
 Autor
